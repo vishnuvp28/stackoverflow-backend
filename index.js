@@ -4,17 +4,21 @@ import { MongoClient, ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { auth } from "./middleware/auth.js";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
 const port = 4000;
-const MONGO_URL = "mongodb://127.0.0.1";
-
+// const MONGO_URL = "mongodb://127.0.0.1";
+const MONGO_URL = process.env.MONGO_URL;
 const client = new MongoClient(MONGO_URL);
 await client.connect();
 console.log("mongo is connected");
+
+
 
 //functions
 async function generateHashedPassword(password) {
@@ -103,17 +107,26 @@ app.get("/home",auth, async (req, res) => {
   res.send(result);
 });
 
+app.get("/", async (req, res) => {
+  const result = await client
+    .db("stackoverflow")
+    .collection("users")
+    .find({})
+    .toArray();
+  res.send(result);
+});
+
 //to post
 app.post("/create", async (req, res) => {
   const data = req.body;
   const result = await client
     .db("stackoverflow")
     .collection("users")
-    .insertOne(data);
+    .insertMany(data);
   res.send(result);
 });
 
-//get answer by id(views)
+//get answer by id(views) 
 app.get("/answer/:id", async function (req, res) {
   const { id } = req.params;
   const result = await client
@@ -129,28 +142,6 @@ app.get("/answer/:id", async function (req, res) {
     res.send(result);
   }
 });
-
-// app.get("/answer/:id", async function (req, res) {
-//   const { id } = req.params;
-//   const result = await client5
-//     .db("stackoverflow")
-//     .collection("users")
-//     .findOne({ _id: new ObjectId(id) });
-//   if (result) {
-//     result.votes = result.votes + 1;
-//     await client
-//       .db("stackoverflow")
-//       .collection("users")
-//       .updateOne({ _id: new ObjectId(id) }, { $set: result });
-//   } else {
-//     result.votes = result.votes + 1;
-//     await client
-//       .db("stackoverflow")
-//       .collection("users")
-//       .updateOne({ _id: new ObjectId(id) }, { $set: result });
-//   }
-//   res.send(result);
-// });
 
 //get questions
 app.get("/questions", async (req, res) => {
