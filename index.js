@@ -18,8 +18,6 @@ const client = new MongoClient(MONGO_URL);
 await client.connect();
 console.log("mongo is connected");
 
-
-
 //functions
 async function generateHashedPassword(password) {
   const NO_OF_ROUNDS = 10;
@@ -31,13 +29,13 @@ async function generateHashedPassword(password) {
 }
 
 async function createUser(data) {
-  return await client.db("stackoverflow").collection("users").insertOne(data);
+  return await client.db("stackoverflow").collection("user").insertOne(data);
 }
 
 async function getUserByName(userName) {
   return await client
     .db("stackoverflow")
-    .collection("users")
+    .collection("user")
     .findOne({ userName: userName });
 }
 
@@ -98,7 +96,7 @@ app.get("/", async (req, res) => {
 });
 
 //Home
-app.get("/home",auth, async (req, res) => {
+app.get("/home", auth, async (req, res) => {
   const result = await client
     .db("stackoverflow")
     .collection("users")
@@ -122,11 +120,11 @@ app.post("/create", async (req, res) => {
   const result = await client
     .db("stackoverflow")
     .collection("users")
-    .insertMany(data);
+    .insertOne(data);
   res.send(result);
 });
 
-//get answer by id(views) 
+//get answer by id(views)
 app.get("/answer/:id", async function (req, res) {
   const { id } = req.params;
   const result = await client
@@ -203,6 +201,7 @@ app.get("/users", async (req, res) => {
   res.send(result);
 });
 
+//tags
 app.get("/tags", async (req, res) => {
   const result = await client
     .db("stackoverflow")
@@ -212,6 +211,7 @@ app.get("/tags", async (req, res) => {
   res.send(result);
 });
 
+//signup
 app.post("/signup", async (req, res) => {
   const { userName, password } = req.body;
   const userFromDB = await getUserByName(userName);
@@ -231,6 +231,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+//login
 app.post("/login", async (req, res) => {
   const { userName, password } = req.body;
   const userFromDB = await getUserByName(userName);
