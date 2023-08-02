@@ -81,22 +81,19 @@ app.get("/pro", function (req, res) {
   res.send(data);
 });
 
-//Login
-app.get("/", async (req, res) => {
-  console.log(req.query);
-  if (req.query.views) {
-    req.query.views = +req.query.views;
-  }
-  const result = await client
-    .db("stackoverflow")
-    .collection("users")
-    .find({})
-    .toArray();
-  res.send(result);
-});
+// //Login
+// app.get("/", async (req, res) => {
+//   console.log(req.body);
+//   const result = await client
+//     .db("stackoverflow")
+//     .collection("user")
+//     .find({})
+//     .toArray();
+//   res.send(result);
+// });
 
 //Home
-app.get("/home", auth, async (req, res) => {
+app.get("/home",  async (req, res) => {
   const result = await client
     .db("stackoverflow")
     .collection("users")
@@ -105,14 +102,7 @@ app.get("/home", auth, async (req, res) => {
   res.send(result);
 });
 
-app.get("/", async (req, res) => {
-  const result = await client
-    .db("stackoverflow")
-    .collection("users")
-    .find({})
-    .toArray();
-  res.send(result);
-});
+
 
 //to post
 app.post("/create", async (req, res) => {
@@ -212,10 +202,10 @@ app.get("/tags", async (req, res) => {
 });
 
 //signup
-app.post("/signup", async (req, res) => {
+app.post("/", async (req, res) => {
   const { userName, password } = req.body;
   const userFromDB = await getUserByName(userName);
-  console.log(userFromDB);
+  // console.log(userFromDB);
   if (userFromDB) {
     res.status(400).send({ message: "UserName already exists" });
   } else if (password.length < 8) {
@@ -226,7 +216,6 @@ app.post("/signup", async (req, res) => {
       userName: userName,
       password: hashedPassword,
     });
-
     res.send(result);
   }
 });
@@ -235,13 +224,13 @@ app.post("/signup", async (req, res) => {
 app.post("/login", async (req, res) => {
   const { userName, password } = req.body;
   const userFromDB = await getUserByName(userName);
-  console.log(userFromDB);
+  // console.log(userFromDB);
   if (!userFromDB) {
     res.status(400).send({ message: "Invalid Credentials" });
   } else {
     const storedDBPassword = userFromDB.password;
     const isPasswordCheck = await bcrypt.compare(password, storedDBPassword);
-    console.log(isPasswordCheck);
+    // console.log(isPasswordCheck);
     if (isPasswordCheck) {
       const token = jwt.sign(
         { id: userFromDB._id },
