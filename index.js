@@ -45,8 +45,7 @@ const data = [
     userName: "vishnu",
     topic: "Javascript",
     description: "What is Javascript",
-    views: 0,
-    votes: 0,
+    views: 85,
     answer: [
       {
         userNameAnswer: "Karthik",
@@ -56,14 +55,53 @@ const data = [
         userNameAnswer: "Chandru",
         answer: "Javascript is based on line by line execution",
       },
+      {
+        userNameAnswer: "karthik",
+        answer: "Javascript is based on line by line execution",
+      },
+      {
+        userNameAnswer: "vp",
+        answer: "Javascript is based on line by line execution",
+      },
+      {
+        userNameAnswer: "kar",
+        answer: "Javascript is based on line by line execution",
+      },
+      {
+        userNameAnswer: "dfhdfhg",
+        answer: "dffdxxh",
+      },
+      {
+        userNameAnswer: "sdfgfdbhdhfg",
+        answer: "fdbgfgnhgjgkhgmJavascript is based on line by line execution",
+      },
+      {
+        userNameAnswer: "dfgfdh",
+        answer: "dfgfdhh",
+      },
+      {
+        userNameAnswer: "cg hgfjcghujghjghgjgjhjghjghjghjghfghffd",
+        answer: "cg hgfjcghujghjghgjgjhjghjghjghjghfghffd",
+      },
+      {
+        userNameAnswer: "varsha",
+        answer:
+          "JS is short for just sayin. ' It's used to put emphasis on a stated opinion or fact …",
+      },
+      {
+        userNameAnswer: "4th5y46u67u78i8i8i87",
+        answer: "sangeetha",
+      },
     ],
+    votes: 0,
+    companies: "Audible",
+    tags: "java",
   },
   {
     userName: "Gayathri",
     topic: "ReactJS",
     description: "What is ReactJS",
-    views: 0,
-    votes: 0,
+    views: 19,
     answer: [
       {
         userNameAnswer: "Sonam",
@@ -73,7 +111,76 @@ const data = [
         userNameAnswer: "Dhanam",
         answer: "ReactJs has SPA, Reusability, Good performance",
       },
+      {
+        userNameAnswer: "vp",
+        answer:
+          "\nThe React.js framework is an open-source JavaScript framework and library developed by Facebook. It's used for building interactive user interfaces and web applications quickly and efficiently with significantly less code than you would with vanilla JavaScript.",
+      },
     ],
+    votes: 0,
+    companies: "MaibornWolff GmbH",
+    tags: "javascript",
+  },
+  {
+    topic: "nodejs",
+    description: "what is  nodejs",
+    userName: "vp",
+    answer: [],
+    views: 2,
+    votes: 0,
+    companies: "ABBYY",
+    tags: "c++",
+  },
+  {
+    topic: "Nodejs",
+    description:
+      "Node. js is easily employed as a server-side proxy, where it can handle a large amount of simultaneous connections in a nonblocking manner. It's useful for proxying different services with varying response times, or collecting data from multiple source points.",
+    userName: "karthik",
+    answer: [],
+    views: 1,
+    votes: 0,
+    companies: "Amperity",
+    tags: "nodejs",
+  },
+  {
+    topic: "C language",
+    description: "What is C language?",
+    userName: "Chan",
+    answer: [],
+    views: 1,
+    votes: 0,
+    companies: "Siemens AG",
+    tags: "C",
+  },
+  {
+    topic: "MongoDB",
+    description: "what is mongoDB",
+    userName: "aswin",
+    answer: [],
+    views: 0,
+    votes: 0,
+    companies: "WiseTech Global",
+    tags: "javascript",
+  },
+  {
+    topic: "MySql",
+    description: "what is MySql?",
+    userName: "brijesh",
+    answer: [],
+    views: 0,
+    votes: 0,
+    companies: "Thermo Fisher Scientific Careers",
+    tags: "Mysql",
+  },
+  {
+    topic: "javaScript",
+    description: "what is spread operator?",
+    userName: "kumar",
+    answer: [],
+    views: 0,
+    votes: 0,
+    companies: "intive",
+    tags: "js",
   },
 ];
 
@@ -81,19 +188,8 @@ app.get("/pro", function (req, res) {
   res.send(data);
 });
 
-// //Login
-// app.get("/", async (req, res) => {
-//   console.log(req.body);
-//   const result = await client
-//     .db("stackoverflow")
-//     .collection("user")
-//     .find({})
-//     .toArray();
-//   res.send(result);
-// });
-
 //Home
-app.get("/home",  async (req, res) => {
+app.get("/home", async (req, res) => {
   const result = await client
     .db("stackoverflow")
     .collection("users")
@@ -102,15 +198,13 @@ app.get("/home",  async (req, res) => {
   res.send(result);
 });
 
-
-
 //to post
 app.post("/create", async (req, res) => {
   const data = req.body;
   const result = await client
     .db("stackoverflow")
     .collection("users")
-    .insertOne(data);
+    .insertMany(data);
   res.send(result);
 });
 
@@ -198,6 +292,17 @@ app.get("/tags", async (req, res) => {
     .collection("users")
     .find({})
     .toArray();
+  res.send(result);
+});
+
+//companies
+app.get("/companies", async (req, res) => {
+  const result = await client
+    .db("stackoverflow")
+    .collection("users")
+    .find({})
+    .toArray();
+  console.log(result);
   res.send(result);
 });
 
