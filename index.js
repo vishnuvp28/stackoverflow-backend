@@ -204,7 +204,7 @@ app.post("/create", async (req, res) => {
   const result = await client
     .db("stackoverflow")
     .collection("users")
-    .insertMany(data);
+    .insertOne(data);
   res.send(result);
 });
 
