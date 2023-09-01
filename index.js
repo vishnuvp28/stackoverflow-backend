@@ -189,7 +189,7 @@ app.get("/pro", function (req, res) {
 });
 
 //Home
-app.get("/home", async (req, res) => {
+app.get("/home",auth, async (req, res) => {
   const result = await client
     .db("stackoverflow")
     .collection("users")
@@ -307,10 +307,10 @@ app.get("/companies", async (req, res) => {
 });
 
 //signup
-app.post("/", async (req, res) => {
+app.post("/",auth, async (req, res) => {
   const { userName, password } = req.body;
   const userFromDB = await getUserByName(userName);
-  // console.log(userFromDB);
+  console.log(userFromDB);
   if (userFromDB) {
     res.status(400).send({ message: "UserName already exists" });
   } else if (password.length < 8) {
@@ -321,6 +321,7 @@ app.post("/", async (req, res) => {
       userName: userName,
       password: hashedPassword,
     });
+    console.log(result);
     res.send(result);
   }
 });
@@ -329,13 +330,13 @@ app.post("/", async (req, res) => {
 app.post("/login", async (req, res) => {
   const { userName, password } = req.body;
   const userFromDB = await getUserByName(userName);
-  // console.log(userFromDB);
+  console.log(userFromDB);
   if (!userFromDB) {
     res.status(400).send({ message: "Invalid Credentials" });
   } else {
     const storedDBPassword = userFromDB.password;
     const isPasswordCheck = await bcrypt.compare(password, storedDBPassword);
-    // console.log(isPasswordCheck);
+    console.log(isPasswordCheck);
     if (isPasswordCheck) {
       const token = jwt.sign(
         { id: userFromDB._id },
