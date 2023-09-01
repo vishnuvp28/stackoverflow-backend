@@ -307,7 +307,7 @@ app.get("/companies", async (req, res) => {
 });
 
 //signup
-app.post("/",auth, async (req, res) => {
+app.post("/", async (req, res) => {
   const { userName, password } = req.body;
   const userFromDB = await getUserByName(userName);
   console.log(userFromDB);
