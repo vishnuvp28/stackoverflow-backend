@@ -189,7 +189,7 @@ app.get("/pro", function (req, res) {
 });
 
 //Home
-app.get("/home",auth, async (req, res) => {
+app.get("/home", async (req, res) => {
   const result = await client
     .db("stackoverflow")
     .collection("users")
