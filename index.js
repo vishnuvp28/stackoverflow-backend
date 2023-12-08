@@ -307,7 +307,7 @@ app.get("/companies", async (req, res) => {
 });
 
 //signup
-app.post("/", async (req, res) => {
+app.post("/",auth, async (req, res) => {
   const { userName, password } = req.body;
   const userFromDB = await getUserByName(userName);
   console.log(userFromDB);
@@ -327,7 +327,8 @@ app.post("/", async (req, res) => {
 });
 
 //login
-app.post("/login", async (req, res) => {
+app.post("/login",auth, async (req, res) => {
+  
   const { userName, password } = req.body;
   const userFromDB = await getUserByName(userName);
   console.log(userFromDB);
@@ -345,6 +346,7 @@ app.post("/login", async (req, res) => {
       res.status(200).send({ message: "Login Successful", token: token });
     } else {
       res.status(401).send({ message: "Invalid Credentials" });
+
     }
   }
 });
