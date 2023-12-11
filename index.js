@@ -2,8 +2,8 @@ import express from "express";
 import cors from "cors";
 import { MongoClient, ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { auth } from "./middleware/auth.js";
+// import jwt from "jsonwebtoken";
+// import { auth } from "./middleware/auth.js";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -189,7 +189,7 @@ app.get("/pro", function (req, res) {
 });
 
 //Home
-app.get("/home", async (req, res) => {
+app.get("/", async (req, res) => {
   const result = await client
     .db("stackoverflow")
     .collection("users")
@@ -307,49 +307,49 @@ app.get("/companies", async (req, res) => {
 });
 
 //signup
-app.post("/",auth, async (req, res) => {
-  const { userName, password } = req.body;
-  const userFromDB = await getUserByName(userName);
-  console.log(userFromDB);
-  if (userFromDB) {
-    res.status(400).send({ message: "UserName already exists" });
-  } else if (password.length < 8) {
-    res.status(400).send({ message: "Password must be atleast 8 charecters" });
-  } else {
-    const hashedPassword = await generateHashedPassword(password);
-    const result = await createUser({
-      userName: userName,
-      password: hashedPassword,
-    });
-    console.log(result);
-    res.send(result);
-  }
-});
+// app.post("/",auth, async (req, res) => {
+//   const { userName, password } = req.body;
+//   const userFromDB = await getUserByName(userName);
+//   console.log(userFromDB);
+//   if (userFromDB) {
+//     res.status(400).send({ message: "UserName already exists" });
+//   } else if (password.length < 8) {
+//     res.status(400).send({ message: "Password must be atleast 8 charecters" });
+//   } else {
+//     const hashedPassword = await generateHashedPassword(password);
+//     const result = await createUser({
+//       userName: userName,
+//       password: hashedPassword,
+//     });
+//     console.log(result);
+//     res.send(result);
+//   }
+// });
 
 //login
-app.post("/login",auth, async (req, res) => {
+// app.post("/login",auth, async (req, res) => {
   
-  const { userName, password } = req.body;
-  const userFromDB = await getUserByName(userName);
-  console.log(userFromDB);
-  if (!userFromDB) {
-    res.status(400).send({ message: "Invalid Credentials" });
-  } else {
-    const storedDBPassword = userFromDB.password;
-    const isPasswordCheck = await bcrypt.compare(password, storedDBPassword);
-    console.log(isPasswordCheck);
-    if (isPasswordCheck) {
-      const token = jwt.sign(
-        { id: userFromDB._id },
-        "dnfsdkbfkdsbfkdsbfaksjbaskfdskbdskndsk"
-      );
-      res.status(200).send({ message: "Login Successful", token: token });
-    } else {
-      res.status(401).send({ message: "Invalid Credentials" });
+//   const { userName, password } = req.body;
+//   const userFromDB = await getUserByName(userName);
+//   console.log(userFromDB);
+//   if (!userFromDB) {
+//     res.status(400).send({ message: "Invalid Credentials" });
+//   } else {
+//     const storedDBPassword = userFromDB.password;
+//     const isPasswordCheck = await bcrypt.compare(password, storedDBPassword);
+//     console.log(isPasswordCheck);
+//     if (isPasswordCheck) {
+//       const token = jwt.sign(
+//         { id: userFromDB._id },
+//         "dnfsdkbfkdsbfkdsbfaksjbaskfdskbdskndsk"
+//       );
+//       res.status(200).send({ message: "Login Successful", token: token });
+//     } else {
+//       res.status(401).send({ message: "Invalid Credentials" });
 
-    }
-  }
-});
+//     }
+//   }
+// });
 
 app.listen(port, () => {
   console.log(`server started in ${port} `);
