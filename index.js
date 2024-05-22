@@ -316,8 +316,7 @@ app.post("/", async (req, res) => {
   console.log(userFromDB);
   if (userFromDB) {
     res.status(400).send({ message: "UserName already exists" });
-  } else if (password.length < 8) {
-    res.status(400).send({ message: "Password must be atleast 8 charecters" });
+  
   } else {
     const hashedPassword = await generateHashedPassword(password);
     const result = await createUser({
