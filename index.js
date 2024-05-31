@@ -332,6 +332,11 @@ app.post("/", async (req, res) => {
 app.post("/login", async (req, res) => {
   
   const { userName, password } = req.body;
+
+  if(!userName || !password){
+    return res.status(400).send({ message: "Username and password are required" });
+  }
+  
   const userFromDB = await getUserByName(userName);
   console.log(userFromDB);
   if (!userFromDB) {
